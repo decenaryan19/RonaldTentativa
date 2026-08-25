@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Ronald Tentativa — Video Editor</title>
+  <meta name="description" content="Ronald Tentativa — video editor. Short-form, real estate, reels, and product ads." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #000;
+      --turquoise: #40ffd9;
+      --cyan: #00f5ff;
+      --green: #39ff14;
+      --text: #f3f7f4;
+      --muted: #8d9b94;
+      --line: rgba(64, 255, 217, 0.22);
+      --pad: max(16px, env(safe-area-inset-left));
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html, body { background: var(--bg); color: var(--text); }
+    body {
+      font-family: Syne, system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font-family: inherit; }
+
+    .wrap {
+      width: min(1080px, 100%);
+      margin: 0 auto;
+      padding-left: var(--pad);
+      padding-right: max(16px, env(safe-area-inset-right));
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: max(10px, env(safe-area-inset-top)) var(--pad) 10px;
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .logo svg {
+      width: 44px;
+      height: 44px;
+      filter: drop-shadow(0 0 12px rgba(64, 255, 217, 0.45));
+    }
+    .logo small {
+      display: none;
+      font-weight: 600;
+      letter-spacing: .08em;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .nav-links {
+      display: none;
+      gap: 18px;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .nav-links a { padding: 8px 0; }
+    .nav-links a:hover { color: var(--turquoise); }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 0;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-white { background: #fff; color: #000; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .burger {
+      width: 44px; height: 44px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 20px;
+    }
+    .menu {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      padding: 8px var(--pad) 16px;
+      background: #000;
+      border-bottom: 1px solid var(--line);
+    }
+    .menu.open { display: flex; }
+    .menu a {
+      padding: 12px 4px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hero {
+      padding: 36px 0 28px;
+      text-align: center;
+    }
+    .kicker {
+      font-size: 11px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--turquoise);
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(48px, 16vw, 96px);
+      font-weight: 600;
+      line-height: .9;
+    }
+    .full-name {
+      margin-top: 8px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .tagline {
+      margin: 14px auto 0;
+      max-width: 420px;
+      font-size: 15px;
+      background: linear-gradient(90deg, var(--cyan), var(--turquoise), var(--green));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+    .orb {
+      width: min(220px, 46vw);
+      height: min(220px, 46vw);
+      margin: 28px auto 0;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 28%, #d8fff8, transparent 32%),
+        radial-gradient(circle at 68% 48%, #40ffd9, transparent 40%),
+        radial-gradient(circle at 50% 70%, #074b4a, #01110f 70%);
+      box-shadow: 0 0 40px rgba(64,255,217,.4);
+    }
+
+    section { padding: 48px 0; }
+    .section-title {
+      font-size: clamp(22px, 6vw, 34px);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .section-title small {
+      display: block;
+      font-size: 11px;
+      letter-spacing: .28em;
+      color: var(--turquoise);
+      margin-bottom: 6px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 14px;
+      margin-bottom: 8px;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tabs button {
+      flex: 0 0 auto;
+      min-height: 40px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .tabs button.on {
+      background: var(--turquoise);
+      color: #041410;
+      border-color: var(--turquoise);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .card {
+      position: relative;
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 9 / 14;
+      background: #0c1110;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+    .card video, .card iframe, .card .thumb {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: 0;
+      pointer-events: none;
+      background: #0c1110;
+    }
+    .card .thumb {
+      z-index: 1;
+      transition: opacity .2s ease;
+    }
+    .card iframe.clip-frame {
+      width: 180%;
+      height: 180%;
+      top: -12%;
+      left: -40%;
+    }
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,.8));
+      pointer-events: none;
+    }
+    .play {
+      position: absolute;
+      z-index: 3;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.5);
+      background: rgba(0,0,0,.4);
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+    .play svg { width: 14px; margin-left: 2px; fill: #fff; }
+    .card.loading .play {
+      border-color: var(--turquoise);
+      animation: spin .7s linear infinite;
+    }
+    .card.loading .play svg { opacity: 0; }
+    .card.has-clip:hover .thumb,
+    .card.has-clip:hover .play,
+    .card.playing .thumb,
+    .card.playing .play { opacity: 0; }
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .meta {
+      position: absolute;
+      z-index: 2;
+      left: 10px; right: 10px; bottom: 10px;
+    }
+    .meta h3 { font-size: 13px; }
+    .meta p { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .08em; }
+
+    .about p {
+      color: #c9d4ce;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .stat {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .stat b {
+      display: block;
+      font-size: 20px;
+      color: var(--turquoise);
+    }
+    .stat span { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+    .lab-shell {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #070b09;
+    }
+    .lab-top { padding: 16px 14px 8px; }
+    .lab-top h3 { font-size: 20px; margin-top: 4px; }
+    .lab-mission { color: #cdeee6; font-size: 13px; line-height: 1.5; margin-top: 6px; }
+    .lab-hud {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .lab-hud b { display: block; font-size: 18px; color: var(--turquoise); letter-spacing: 0; }
+
+    .beat-stage {
+      position: relative;
+      margin: 8px 14px 12px;
+      height: 230px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #050807;
+      overflow: hidden;
+    }
+    .beat-stage.drop { background: radial-gradient(circle at 50% 80%, rgba(64,255,217,.16), transparent 46%), #050807; }
+    .beat-stage.sides { background: radial-gradient(circle at 18% 50%, rgba(0,245,255,.16), transparent 42%), radial-gradient(circle at 82% 50%, rgba(57,255,20,.16), transparent 42%), #050807; }
+    .beat-stage.color { background: radial-gradient(circle at 22% 72%, rgba(0,245,255,.14), transparent 34%), radial-gradient(circle at 50% 72%, rgba(64,255,217,.14), transparent 34%), radial-gradient(circle at 78% 72%, rgba(255,77,154,.16), transparent 34%), #050807; }
+    .beat-pulse {
+      position: absolute;
+      left: 50%;
+      bottom: 36px;
+      width: 54px; height: 54px;
+      margin-left: -27px;
+      border-radius: 50%;
+      border: 2px solid var(--turquoise);
+      box-shadow: 0 0 18px rgba(64,255,217,.35);
+      transition: transform .08s, border-color .08s;
+      pointer-events: none;
+    }
+    .beat-pulse.go { transform: scale(1.18); }
+    .hit-line {
+      position: absolute;
+      left: 14%; right: 14%;
+      bottom: 58px;
+      height: 3px;
+      border-radius: 99px;
+      background: var(--turquoise);
+      box-shadow: 0 0 12px var(--turquoise);
+    }
+    .beat-stage.sides .hit-line {
+      left: 50%; right: auto; top: 16%; bottom: 16%;
+      width: 3px; height: auto;
+    }
+    .note {
+      position: absolute;
+      width: 22px; height: 22px;
+      margin-left: -11px;
+      pointer-events: none;
+    }
+    .note.circle { border-radius: 50%; }
+    .note.diamond { border-radius: 3px; transform: rotate(45deg); }
+    .note.square { border-radius: 5px; }
+    .note.teal { background: #40FFD9; box-shadow: 0 0 14px #40FFD9; }
+    .note.cyan { background: #00F5FF; box-shadow: 0 0 14px #00F5FF; }
+    .note.lime { background: #39FF14; box-shadow: 0 0 14px #39FF14; }
+    .note.pink { background: #FF4D9A; box-shadow: 0 0 14px #FF4D9A; }
+    .note.gone { opacity: 0; }
+    .hit-fb {
+      min-height: 28px;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+    .hit-fb.perfect { color: var(--turquoise); text-shadow: 0 0 12px var(--turquoise); }
+    .hit-fb.good { color: var(--green); }
+    .hit-fb.miss { color: #ff6b6b; }
+    .cut-row { display: flex; gap: 8px; margin: 0 14px 14px; }
+    .cut-btn {
+      flex: 1;
+      min-height: 58px;
+      border: 0;
+      border-radius: 16px;
+      color: #041410;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+    .cut-btn kbd {
+      display: block;
+      margin-top: 4px;
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: .14em;
+      opacity: .72;
+      font-weight: 700;
+    }
+    .cut-btn:active { transform: scale(.97); }
+    .cut-btn.teal { background: #40FFD9; }
+    .cut-btn.cyan { background: #00F5FF; }
+    .cut-btn.lime { background: #39FF14; }
+    .cut-btn.pink { background: #FF4D9A; color: #fff; }
+    .lab-actions { display: flex; gap: 8px; padding: 0 14px 16px; flex-wrap: wrap; }
+    .lab-act {
+      min-height: 42px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .tools-band {
+      background: linear-gradient(90deg, #041428, #00c4c8, #40ffd9, #c8ff3a);
+      padding: 36px 16px;
+      text-align: center;
+    }
+    .tools-band h2 { letter-spacing: .4em; font-size: 14px; margin-bottom: 22px; }
+    .tool-row { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+    .tool { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    .tool-ico {
+      width: 64px; height: 64px;
+      border-radius: 16px;
+      margin: 0 auto 8px;
+      background: rgba(0,0,0,.3);
+      display: grid;
+      place-items: center;
+    }
+    .tool-ico svg { width: 40px; height: 40px; }
+
+    .contact { text-align: center; padding-bottom: 36px; }
+    .contact h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(32px, 9vw, 56px);
+    }
+    .contact p { color: var(--muted); margin: 10px auto 22px; max-width: 420px; font-size: 14px; }
+    form { display: grid; gap: 10px; text-align: left; max-width: 520px; margin: 0 auto; }
+    input, textarea {
+      width: 100%;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      color: #fff;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    .form-ok { display: none; color: var(--green); font-size: 13px; }
+
+    footer {
+      padding: 18px var(--pad) max(24px, env(safe-area-inset-bottom));
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-align: center;
+      border-top: 1px solid var(--line);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.88);
+      z-index: 80;
+      display: none;
+      place-items: center;
+      padding: 16px;
+    }
+    .lightbox.open { display: grid; }
+    .lightbox-card {
+      width: min(380px, 92vw);
+      aspect-ratio: 9 / 16;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+    }
+    .lightbox-card video, .lightbox-card iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+    }
+    .close-lb {
+      position: absolute;
+      top: max(12px, env(safe-area-inset-top));
+      right: 14px;
+      width: 44px; height: 44px;
+      border: 0;
+      border-radius: 50%;
+      background: #fff;
+      font-size: 22px;
+    }
+
+    @media (max-width: 380px) {
+      .grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 700px) {
+      .grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .hero { padding-top: 56px; }
+      .logo small { display: inline; }
+      section { padding: 64px 0; }
+    }
+    @media (min-width: 900px) {
+      .nav-links { display: flex; }
+      .burger, .menu { display: none !important; }
+      .hero { text-align: left; }
+      .hero-inner {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr;
+        align-items: center;
+        gap: 24px;
+      }
+      .hero-actions, .orb { margin-left: 0; }
+      .orb { margin-right: 0; width: 280px; height: 280px; }
+      .tagline { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="logo" href="#top" aria-label="Ronald Tentativa">
+      <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="lg" x1="8" y1="4" x2="56" y2="60">
+            <stop stop-color="#B8FFF6"/>
+            <stop offset=".45" stop-color="#40FFD9"/>
+            <stop offset="1" stop-color="#6CFF55"/>
+          </linearGradient>
+        </defs>
+        <circle cx="32" cy="32" r="26" stroke="url(#lg)" stroke-width="2.4"/>
+        <path fill="url(#lg)" d="M26 18.5 L48 32 L26 45.5 Z"/>
+      </svg>
+      RONALD <small>Tentativa</small>
+    </a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#lab">Play</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a class="btn btn-white" href="#contact">Hire Me</a>
+      <button class="burger" id="burger" type="button" aria-label="Open menu">☰</button>
+    </div>
+  </nav>
+  <div class="menu" id="menu">
+    <a href="#work">Work</a>
+    <a href="#lab">Play</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <header class="hero wrap" id="top">
+    <div class="hero-inner">
+      <div>
+        <p class="kicker">Video Editor</p>
+        <h1>RONALD</h1>
+        <p class="full-name">Ronald Tentativa</p>
+        <p class="tagline">Raw footage, clean cuts, bright color.</p>
+        <div class="hero-actions">
+          <a class="btn btn-white" href="#contact">Work with Me</a>
+          <a class="btn btn-ghost" href="#lab">Play</a>
+        </div>
+      </div>
+      <div class="orb" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <section id="work">
+    <div class="wrap">
+      <h2 class="section-title"><small>Work</small>Selected cuts</h2>
+      <div class="tabs" id="tabs">
+        <button type="button" data-cat="all" class="on">All</button>
+        <button type="button" data-cat="short">Short-form</button>
+        <button type="button" data-cat="real">Real estate</button>
+        <button type="button" data-cat="reels">Reels</button>
+        <button type="button" data-cat="ads">Ads</button>
+        <button type="button" data-cat="church">Church</button>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about">
+      <h2 class="section-title"><small>About</small>3 years editing</h2>
+      <p>I’m Ronald Tentativa. I edit short-form, real estate, reels, and product ads — tight pacing, clean color, and a look that holds attention.</p>
+      <div class="stats">
+        <div class="stat"><b>200+</b><span>Projects</span></div>
+        <div class="stat"><b>3 yrs</b><span>Editing</span></div>
+        <div class="stat"><b>50+</b><span>Clients</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lab">
+    <div class="wrap">
+      <h2 class="section-title"><small>Play</small>Beat Cut</h2>
+      <div class="lab-shell">
+        <div class="lab-top">
+          <p class="kicker" id="mission-kicker">Round 1</p>
+          <h3 id="mission-title">Cut on the beat</h3>
+          <p class="lab-mission" id="mission-copy">Tap CUT when the glow hits the line. Keep the rhythm.</p>
+          <div class="lab-hud">
+            <div>Score<b id="lab-score">0</b></div>
+            <div>Combo<b id="lab-combo">0</b></div>
+            <div>Round<b id="lab-shot">1/10</b></div>
+          </div>
+        </div>
+        <div class="beat-stage" id="beat-stage">
+          <div class="hit-line"></div>
+          <div class="beat-pulse" id="beat-pulse"></div>
+        </div>
+        <p class="hit-fb" id="hit-fb">Ready</p>
+        <div class="cut-row" id="cut-row"></div>
+        <div class="lab-actions">
+          <button class="lab-act" type="button" id="btn-start">Start <kbd style="opacity:.7">Enter</kbd></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tools-band" id="tools">
+    <h2>TOOLS</h2>
+    <div class="tool-row">
+      <div class="tool"><div class="tool-ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#9999FF"/><text x="32" y="40" text-anchor="middle" font-size="22" font-family="Syne,sans-serif" font-weight="800" fill="#1a1464">Pr</text></svg></div>Premiere</div>
+      <div class="tool"><div class="tool-ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#9999FF"/><text x="32" y="40" text-anchor="middle" font-size="22" font-family="Syne,sans-serif" font-weight="800" fill="#1a1464">Ae</text></svg></div>After Effects</div>
+      <div class="tool"><div class="tool-ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#111"/><text x="32" y="41" text-anchor="middle" font-size="28" font-family="Syne,sans-serif" font-weight="800" fill="#fff">C</text></svg></div>CapCut</div>
+      <div class="tool"><div class="tool-ico"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#111"/><path d="M32 8 A24 24 0 0 1 56 32 L32 32 Z" fill="#F4C542"/><path d="M56 32 A24 24 0 0 1 32 56 L32 32 Z" fill="#E24C3A"/><path d="M32 56 A24 24 0 0 1 8 32 L32 32 Z" fill="#3D8BFF"/><path d="M8 32 A24 24 0 0 1 32 8 L32 32 Z" fill="#3CCF8A"/></svg></div>DaVinci</div>
+    </div>
+  </section>
+
+  <section class="contact wrap" id="contact">
+    <h2>Let’s work.</h2>
+      <p>Send a note for reels, listings, or ads. It goes to Ronald and a copy to your email.</p>
+    <form id="hire-form">
+      <input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+      <input type="email" name="email" placeholder="Email" required autocomplete="email" />
+      <textarea name="message" placeholder="What do you need edited?" required></textarea>
+      <button class="btn btn-white" type="submit">Hire Me</button>
+        <p class="form-ok" id="form-ok">Opening email to Ronald, with a copy to you…</p>
+    </form>
+  </section>
+
+  <footer>© <span id="year"></span> Ronald Tentativa · Video editor</footer>
+
+  <div class="lightbox" id="lightbox">
+    <button class="close-lb" id="close-lb" type="button" aria-label="Close">×</button>
+    <div class="lightbox-card" id="preview">
+      <video id="lb-video" controls playsinline></video>
+      <iframe id="lb-frame" title="Video" allow="autoplay; fullscreen" hidden></iframe>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      { cat: "ads", title: "ADS", tag: "Ads", id: "1ozkGu2lFlAk_EdHJnTeSt04d-5Of7fYL", file: "videos/ads-1.mp4", poster: "videos/ads-1.jpg" },
+      { cat: "ads", title: "ADS 2", tag: "Ads", id: "1ORaD3akRrP_y-e70IzuZm78ej-5NUiVO", file: "videos/ads-2.mp4", poster: "videos/ads-2.jpg" },
+      { cat: "ads", title: "Cozy Office Outfit", tag: "Ads", id: "1DtNIFMeVnOWZU2wbNfyiKMNISseI6I01", file: "videos/ads-3.mp4", poster: "videos/ads-3.jpg" },
+      { cat: "ads", title: "TikTok Shop Sample", tag: "Ads", id: "1R90he09YU3plN_j06I1cJUy9BzZBfMzW", file: "videos/ads-4.mp4", poster: "videos/ads-4.jpg" },
+      { cat: "church", title: "CCGM", tag: "Church", id: "182ULLY7hOVzqcnWHucI2NqhYW-g00KuS", heavy: true },
+      { cat: "church", title: "Church Intro", tag: "Church", id: "13JuwpaT_DBNGgq7lGNy1c9jfRhQEyyOK", heavy: true },
+      { cat: "church", title: "Gail Final Edit", tag: "Church", id: "1ZwHY2bjlbPiLiTkKy9Hj6q1b3_6eZvNj", heavy: true },
+      { cat: "real", title: "Edited Real Estate", tag: "Real estate", id: "1eUpuugUkuEwvy85nClRlxCQ1GzvsFVmA", file: "videos/real-1.mp4", poster: "videos/real-1.jpg" },
+      { cat: "real", title: "Real Estate Sample", tag: "Real estate", id: "1qQvIrMUuQyPqpdh8qU2h7y2X2hOEMAH_", file: "videos/real-2.mp4", poster: "videos/real-2.jpg" },
+      { cat: "real", title: "Real Estate", tag: "Real estate", id: "1xAydfcdtZOINgYu5FPyD3OV8mbtXXCWc", file: "videos/real-3.mp4", poster: "videos/real-3.jpg" },
+      { cat: "real", title: "Sample Project", tag: "Real estate", id: "1wVceg8R1r-9yFy0a8c0VjJAzhXCmGw5c", heavy: true },
+      { cat: "reels", title: "Push 4", tag: "Reels", id: "1j1uvazujKWZ_QSJiLZ99-ss_JjD8kxDg", heavy: true },
+      { cat: "reels", title: "Reels", tag: "Reels", id: "1cr3ZcWH1A1ktsPYg97EtFw4AOKQff6KK", file: "videos/reels.mp4", poster: "videos/reels.jpg" },
+      { cat: "reels", title: "Sample Video", tag: "Reels", id: "1LzMHrSakfkEta0LGDoWRKvBZ8IjaC7Y0", heavy: true },
+      { cat: "short", title: "Date Smarter", tag: "Short-form", id: "1YR7DhiTFIL4qzZoOLxkfzHk5WTwQ87n1", heavy: true },
+      { cat: "short", title: "Podcast 2", tag: "Short-form", id: "1RsupvUPslla0fKZTZ8FysKCHyr3fcX2R", heavy: true },
+      { cat: "short", title: "Podcast Sample", tag: "Short-form", id: "1Ztn0YdI5PfUBsgipkqXdrbYAVZ30B0ct", file: "videos/short-podcast.mp4", poster: "videos/short-podcast.jpg" },
+      { cat: "short", title: "Raw and Edited", tag: "Short-form", id: "1itj7hKY6_7X3Bgxb9IV9ltrTuqwCddUy", heavy: true }
+    ];
+    const byId = Object.fromEntries(items.map((i) => [i.id, i]));
+
+    const grid = document.getElementById("grid");
+    function drivePreview(id) {
+      return "https://drive.google.com/file/d/" + id + "/preview";
+    }
+    function driveThumb(id) {
+      return "https://lh3.googleusercontent.com/d/" + id + "=w800";
+    }
+    function pauseGrid() {
+      grid.querySelectorAll(".card").forEach(stopCard);
+    }
+    function playCard(card) {
+      const video = card.querySelector("video.clip-video");
+      if (!video || !video.getAttribute("src")) return;
+      grid.querySelectorAll(".card").forEach((other) => {
+        if (other !== card) stopCard(other);
+      });
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+      card.classList.add("playing");
+      video.play().catch(() => card.classList.remove("playing"));
+    }
+    function stopCard(card) {
+      const video = card.querySelector("video.clip-video");
+      card.classList.remove("playing", "loading");
+      if (!video) return;
+      video.pause();
+      video.muted = true;
+      try { video.currentTime = 0; } catch (e) {}
+    }
+    function render(cat) {
+      const list = cat === "all" ? items : items.filter((i) => i.cat === cat);
+      grid.innerHTML = list.map((i) => {
+        const poster = i.poster || driveThumb(i.id);
+        const src = i.file ? ' src="' + i.file + '"' : "";
+        return `<button class="card${i.file ? " has-clip" : ""}" type="button" data-title="${i.title}" data-id="${i.id}">
+          <video class="clip-video" muted loop playsinline preload="auto"${src} poster="${poster}"></video>
+          <img class="thumb" src="${poster}" alt="${i.title}" />
+          <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          <span class="meta"><h3>${i.title}</h3><p>${i.tag}</p></span>
+        </button>`;
+      }).join("");
+      grid.querySelectorAll(".card").forEach((card) => {
+        card.addEventListener("mouseenter", () => playCard(card));
+        card.addEventListener("mouseleave", () => stopCard(card));
+      });
+    }
+    render("all");
+    document.getElementById("tabs").addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn || !btn.dataset.cat) return;
+      document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b === btn));
+      render(btn.dataset.cat);
+    });
+
+    const lightbox = document.getElementById("lightbox");
+    const lbVideo = document.getElementById("lb-video");
+    const lbFrame = document.getElementById("lb-frame");
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      lbVideo.pause();
+      lbVideo.removeAttribute("src");
+      lbVideo.load();
+      lbFrame.hidden = true;
+      lbFrame.src = "";
+      lbVideo.hidden = false;
+    }
+    grid.addEventListener("click", (e) => {
+      const card = e.target.closest(".card");
+      if (!card) return;
+      const item = byId[card.dataset.id];
+      const cardVid = card.querySelector("video.clip-video");
+      const t = cardVid && cardVid.currentTime ? cardVid.currentTime : 0;
+      pauseGrid();
+      lightbox.classList.add("open");
+      if (item.file) {
+        lbVideo.hidden = false;
+        lbFrame.hidden = true;
+        lbVideo.src = item.file;
+        lbVideo.muted = false;
+        try { lbVideo.currentTime = t; } catch (err) {}
+        lbVideo.play().catch(() => {
+          lbVideo.muted = true;
+          lbVideo.play().catch(() => {});
+        });
+        return;
+      }
+      lbVideo.hidden = true;
+      lbFrame.hidden = false;
+      lbFrame.src = drivePreview(item.id);
+    });
+    document.getElementById("close-lb").onclick = closeLightbox;
+    lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+
+    const burger = document.getElementById("burger");
+    const menu = document.getElementById("menu");
+    burger.onclick = () => menu.classList.toggle("open");
+    menu.addEventListener("click", () => menu.classList.remove("open"));
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById("hire-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const d = new FormData(e.target);
+      const owner = "tentativaron.030420@gmail.com";
+      const visitor = String(d.get("email") || "").trim();
+      const body = encodeURIComponent(
+        "Name: " + d.get("name") + "\nEmail: " + visitor + "\n\n" + d.get("message")
+      );
+      document.getElementById("form-ok").style.display = "block";
+      window.location.href =
+        "mailto:" + owner +
+        "?cc=" + encodeURIComponent(visitor) +
+        "&subject=" + encodeURIComponent("Hire Me — " + d.get("name")) +
+        "&body=" + body;
+    });
+
+    (function lab() {
+      const stage = document.getElementById("beat-stage");
+      const pulse = document.getElementById("beat-pulse");
+      const fb = document.getElementById("hit-fb");
+      const row = document.getElementById("cut-row");
+      const btnStart = document.getElementById("btn-start");
+      const travel = 1100;
+      const palette = {
+        teal: { hex: "#40FFD9", label: "TEAL", freq: 880 },
+        cyan: { hex: "#00F5FF", label: "CYAN", freq: 740 },
+        lime: { hex: "#39FF14", label: "LIME", freq: 620 },
+        pink: { hex: "#FF4D9A", label: "PINK", freq: 520 }
+      };
+      const LAST = 9;
+      const rounds = [
+        { name: "Round 1 · Drop", title: "Center cut", copy: "Teal and cyan drop. Press SPACE or F.", mode: "drop", count: 8, gap: 740, keys: ["teal", "cyan"], shapes: ["circle"] },
+        { name: "Round 2 · Sides", title: "Left and right", copy: "Cyan left, lime right. Press A / ← or D / →.", mode: "sides", count: 9, gap: 660, keys: ["cyan", "lime"], shapes: ["diamond"] },
+        { name: "Round 3 · Color", title: "Two colors", copy: "Match teal or cyan. A / 1 and S / 2.", mode: "color", count: 8, gap: 640, keys: ["teal", "cyan"], shapes: ["circle", "square"] },
+        { name: "Round 4 · Drop", title: "Faster drop", copy: "Pink and lime fall. SPACE or F still cuts.", mode: "drop", count: 10, gap: 600, keys: ["pink", "lime"], shapes: ["diamond", "circle"] },
+        { name: "Round 5 · Sides", title: "Pink / teal", copy: "Pink left, teal right. A / ← and D / →.", mode: "sides", count: 10, gap: 560, keys: ["pink", "teal"], shapes: ["square"] },
+        { name: "Round 6 · Color", title: "Three colors", copy: "Teal, cyan, lime. A S D or 1 2 3.", mode: "color", count: 10, gap: 540, keys: ["teal", "cyan", "lime"], shapes: ["circle", "diamond"] },
+        { name: "Round 7 · Drop", title: "Rush drop", copy: "All colors falling. SPACE or F.", mode: "drop", count: 12, gap: 500, keys: ["teal", "cyan", "lime", "pink"], shapes: ["circle", "diamond", "square"] },
+        { name: "Round 8 · Sides", title: "Quick sides", copy: "Lime left, cyan right. A / ← and D / →.", mode: "sides", count: 12, gap: 460, keys: ["lime", "cyan"], shapes: ["diamond", "square"] },
+        { name: "Round 9 · Color", title: "Four colors", copy: "A S D F or 1 2 3 4. Match every color.", mode: "color", count: 12, gap: 440, keys: ["teal", "cyan", "lime", "pink"], shapes: ["circle", "diamond", "square"] },
+        { name: "Round 10 · Final", title: "Last cut", copy: "Fastest color match. A S D F. Finish the set.", mode: "color", count: 14, gap: 400, keys: ["teal", "cyan", "lime", "pink"], shapes: ["circle", "diamond", "square"] }
+      ];
+      let round = 0, score = 0, combo = 0, playing = false, finished = false;
+      let notes = [], startAt = 0, raf = 0, audio;
+
+      function tone(freq) {
+        try {
+          if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+          if (audio.state === "suspended") audio.resume();
+          const o = audio.createOscillator();
+          const g = audio.createGain();
+          o.type = "square";
+          o.frequency.value = freq;
+          g.gain.value = 0.05;
+          o.connect(g); g.connect(audio.destination);
+          o.start();
+          g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.08);
+          o.stop(audio.currentTime + 0.09);
+        } catch (e) {}
+      }
+      function setFb(text, cls) {
+        fb.textContent = text;
+        fb.className = "hit-fb " + (cls || "");
+      }
+      function hud() {
+        document.getElementById("lab-score").textContent = score;
+        document.getElementById("lab-combo").textContent = combo;
+        document.getElementById("lab-shot").textContent = (Math.min(round, LAST) + 1) + "/10";
+      }
+      function rdata() { return rounds[Math.min(round, LAST)]; }
+      function paintButtons() {
+        const r = rdata();
+        const kbd = { teal: "A / 1", cyan: "S / 2", lime: "D / 3", pink: "F / 4" };
+        let html = "";
+        if (r.mode === "drop") html = '<button class="cut-btn ' + r.keys[0] + '" type="button" data-key="' + r.keys[0] + '">CUT<kbd>SPACE / F</kbd></button>';
+        else if (r.mode === "sides") html = '<button class="cut-btn ' + r.keys[0] + '" type="button" data-key="' + r.keys[0] + '">LEFT<kbd>A / ←</kbd></button><button class="cut-btn ' + r.keys[1] + '" type="button" data-key="' + r.keys[1] + '">RIGHT<kbd>D / →</kbd></button>';
+        else html = r.keys.map((k) => '<button class="cut-btn ' + k + '" type="button" data-key="' + k + '">' + palette[k].label + "<kbd>" + kbd[k] + "</kbd></button>").join("");
+        row.innerHTML = html;
+        row.querySelectorAll(".cut-btn").forEach((b) => { b.onclick = () => cut(b.dataset.key); });
+      }
+      function showRound() {
+        const r = rdata();
+        document.getElementById("mission-kicker").textContent = r.name;
+        document.getElementById("mission-title").textContent = finished ? "Wrap" : r.title;
+        document.getElementById("mission-copy").textContent = r.copy;
+        stage.className = "beat-stage " + r.mode;
+        pulse.style.borderColor = palette[r.keys[0]].hex;
+        paintButtons();
+        hud();
+      }
+      function build() {
+        stage.querySelectorAll(".note").forEach((n) => n.remove());
+        const r = rdata();
+        notes = [];
+        for (let i = 0; i < r.count; i++) {
+          let key = r.keys[0];
+          if (r.mode === "drop") key = r.keys[i % r.keys.length];
+          else if (r.mode === "sides") key = r.keys[i % 2];
+          else key = r.keys[Math.floor(Math.random() * r.keys.length)];
+          const shape = r.shapes[i % r.shapes.length];
+          const el = document.createElement("div");
+          el.className = "note " + shape + " " + key;
+          stage.appendChild(el);
+          notes.push({ t: 900 + i * r.gap, hit: false, el, key, side: r.mode === "sides" && i % 2 === 1 ? "R" : "L" });
+        }
+      }
+      function now() { return performance.now() - startAt; }
+      function place(n, t) {
+        const h = stage.clientHeight, w = stage.clientWidth;
+        const hitY = h - 70;
+        const p = Math.max(-0.2, Math.min(1.25, 1 - (n.t - t) / travel));
+        const mode = rdata().mode;
+        if (mode === "sides") {
+          n.el.style.top = (h / 2 - 11) + "px";
+          n.el.style.left = (n.side === "L" ? (-20 + p * (w * 0.5 + 20)) : (w + 20 - p * (w * 0.5 + 20))) + "px";
+        } else if (mode === "color") {
+          const lanes = { teal: 0.22, cyan: 0.42, lime: 0.62, pink: 0.82 };
+          n.el.style.left = (w * (lanes[n.key] || 0.5)) + "px";
+          n.el.style.top = (-24 + p * (hitY + 24)) + "px";
+        } else {
+          n.el.style.left = (w * 0.5) + "px";
+          n.el.style.top = (-24 + p * (hitY + 24)) + "px";
+        }
+      }
+      function tick() {
+        if (!playing) return;
+        const t = now();
+        notes.forEach((n) => {
+          if (n.hit) return;
+          place(n, t);
+          if (t - n.t > 170 && !n.hit) {
+            n.hit = "miss";
+            n.el.classList.add("gone");
+            combo = 0;
+            setFb("Miss", "miss");
+            hud();
+          }
+        });
+        const near = notes.find((n) => !n.hit && Math.abs(n.t - t) < 90);
+        pulse.classList.toggle("go", !!near);
+        if (near) {
+          pulse.style.borderColor = palette[near.key].hex;
+          pulse.style.boxShadow = "0 0 22px " + palette[near.key].hex;
+        }
+        if (notes.every((n) => n.hit)) {
+          playing = false;
+          endRound();
+          return;
+        }
+        raf = requestAnimationFrame(tick);
+      }
+      function endRound() {
+        if (round >= LAST) {
+          finished = true;
+          document.getElementById("mission-kicker").textContent = "Done";
+          document.getElementById("mission-title").textContent = "Beat locked.";
+          document.getElementById("mission-copy").textContent = "Score " + score + ". Play again?";
+          btnStart.textContent = "Play Again";
+          setFb("Nice cut", "perfect");
+          return;
+        }
+        round += 1;
+        showRound();
+        setFb(rdata().title, "");
+        btnStart.textContent = "Next Round";
+      }
+      function cut(key) {
+        if (!playing) return;
+        const t = now();
+        const r = rdata();
+        let best = null, bestD = 9999;
+        notes.forEach((n) => {
+          if (n.hit) return;
+          if (r.mode !== "drop" && n.key !== key) return;
+          const d = Math.abs(n.t - t);
+          if (d < bestD) { bestD = d; best = n; }
+        });
+        if (!best || bestD > 200) {
+          combo = 0;
+          setFb("Miss", "miss");
+          hud();
+          return;
+        }
+        best.hit = true;
+        best.el.classList.add("gone");
+        pulse.classList.add("go");
+        pulse.style.borderColor = palette[best.key].hex;
+        setTimeout(() => pulse.classList.remove("go"), 90);
+        if (bestD < 85) {
+          combo += 1;
+          score += 100 + combo * 12;
+          setFb("Perfect", "perfect");
+          tone(palette[best.key].freq);
+        } else {
+          combo += 1;
+          score += 60 + combo * 6;
+          setFb("Good", "good");
+          tone(palette[best.key].freq - 80);
+        }
+        hud();
+      }
+      function start() {
+        if (playing) return;
+        if (finished) {
+          finished = false; round = 0; score = 0; combo = 0;
+          btnStart.textContent = "Start";
+        }
+        playing = true;
+        showRound();
+        build();
+        startAt = performance.now();
+        setFb(rdata().mode === "color" ? "Match" : "Cut", "");
+        btnStart.textContent = "Playing...";
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(tick);
+        tone(520);
+      }
+      btnStart.onclick = start;
+      window.addEventListener("keydown", (e) => {
+        if (e.target.closest("input, textarea, #hire-form")) return;
+        if (e.repeat) return;
+        const r = rdata();
+        const code = e.code;
+        if (code === "Enter") {
+          e.preventDefault();
+          if (!playing) start();
+          return;
+        }
+        if (code === "Space" || (r.mode === "drop" && (code === "KeyF" || code === "KeyJ"))) {
+          e.preventDefault();
+          if (!playing) start();
+          else if (r.mode === "drop") cut("teal");
+          return;
+        }
+        if (!playing) return;
+        if (r.mode === "sides") {
+          if (code === "KeyA" || code === "ArrowLeft") { e.preventDefault(); cut(r.keys[0]); }
+          if (code === "KeyD" || code === "ArrowRight") { e.preventDefault(); cut(r.keys[1]); }
+          return;
+        }
+        if (r.mode === "color") {
+          const colorKeys = {
+            KeyA: "teal", Digit1: "teal",
+            KeyS: "cyan", Digit2: "cyan",
+            KeyD: "lime", Digit3: "lime",
+            KeyF: "pink", Digit4: "pink"
+          };
+          if (colorKeys[code]) { e.preventDefault(); cut(colorKeys[code]); }
+        }
+      });
+      showRound();
+    })();
+
+
+  </script>
+</body>
+</html>
